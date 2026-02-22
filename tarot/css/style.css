@@ -1,0 +1,834 @@
+/* ============================================
+   Tarot — Minimal White Theme
+   ============================================ */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #fafafa;
+  --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --border: #e0e0e0;
+  --border-light: #eeeeee;
+  --text: #1a1a1a;
+  --text-secondary: #888888;
+  --text-muted: #b0b0b0;
+  --accent: #1a1a1a;
+  --accent-light: #555555;
+  --highlight: #000000;
+  --red: #c0392b;
+  --blue: #5b7fff;
+  --card-width: 110px;
+  --card-height: 170px;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- App Layout --- */
+#app {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* --- Gesture Cursor --- */
+.gesture-cursor {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  pointer-events: none;
+  z-index: 100;
+  display: none;
+}
+
+.gesture-cursor.active { display: block; }
+
+.gesture-cursor-ring {
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.gesture-cursor-ring::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.gesture-cursor.grabbing .gesture-cursor-ring {
+  background: rgba(0,0,0,0.06);
+  transform: scale(0.8);
+}
+
+.gesture-cursor.open .gesture-cursor-ring {
+  transform: scale(1.3);
+  border-style: dashed;
+}
+
+/* --- Screen --- */
+.screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.4s ease;
+}
+
+.screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- Menu --- */
+.menu-title {
+  font-size: 2.8rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.2em;
+  letter-spacing: 0.15em;
+}
+
+.menu-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 3em;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+}
+
+.spread-options {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.spread-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 22px;
+  width: 190px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+.spread-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+}
+
+.spread-card-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  filter: grayscale(1);
+  opacity: 0.7;
+}
+
+.spread-card-name {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.spread-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.spread-card-count {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* --- Loading --- */
+.loading-container {
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin: 0 auto 18px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* --- Table --- */
+.table-screen {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* --- Instruction Banner --- */
+.instruction-banner {
+  position: fixed;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 30px;
+  z-index: 60;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: opacity 0.35s;
+}
+
+.instruction-banner.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.instruction-text {
+  color: var(--text);
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.instruction-sub {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 4px;
+}
+
+/* --- Meditation Overlay --- */
+.meditation-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.meditation-overlay.hidden {
+  opacity: 0;
+}
+
+.meditation-text {
+  font-size: 1.6rem;
+  color: var(--text);
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: 0 24px;
+  transition: opacity 0.5s ease;
+}
+
+.meditation-text.fading {
+  opacity: 0;
+}
+
+.meditation-hint {
+  position: fixed;
+  bottom: 32px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 480px) {
+  .meditation-text { font-size: 1.2rem; }
+}
+
+/* --- Shuffle Area (full-screen scatter) --- */
+.shuffle-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: none;
+  overflow: hidden;
+}
+
+.shuffle-area.active {
+  display: block;
+}
+
+.scatter-card {
+  position: absolute;
+  width: 70px;
+  height: 108px;
+  pointer-events: none;
+}
+
+.scatter-card .card-back {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.scatter-card .card-back-pattern {
+  width: 78%;
+  height: 84%;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.scatter-card .card-back-pattern::before {
+  content: '⭐';
+  font-size: 1rem;
+}
+
+.scatter-card .card-back-pattern::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+}
+
+.scatter-card.gathering {
+  transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              top 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.6s ease 0.5s;
+}
+
+.scatter-card.entering {
+  transition: left 0.5s cubic-bezier(0.2, 0.8, 0.3, 1),
+              top 0.5s cubic-bezier(0.2, 0.8, 0.3, 1),
+              transform 0.5s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+/* --- Deck / Fan Area --- */
+.deck-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
+  overflow: hidden;
+}
+
+/* Fan card */
+.fan-card {
+  position: absolute;
+  width: var(--card-width);
+  height: var(--card-height);
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 0;
+  transform-origin: center center;
+  transition: opacity 0.4s ease,
+              left 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              top 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.25s ease;
+  filter: brightness(0.95);
+}
+
+.fan-card.visible {
+  opacity: 1;
+}
+
+.fan-card.active {
+  filter: brightness(1) drop-shadow(0 4px 16px rgba(0,0,0,0.15));
+  z-index: 100 !important;
+}
+
+.fan-card.drawn {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* --- Card --- */
+.card {
+  width: var(--card-width);
+  height: var(--card-height);
+  position: relative;
+  perspective: 800px;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Card Back */
+.card-back {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.card-back-pattern {
+  width: 78%;
+  height: 84%;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.card-back-pattern::before {
+  content: '⭐';
+  font-size: 1.4rem;
+}
+
+.card-back-pattern::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--border-light);
+  border-radius: 3px;
+}
+
+/* Card Front */
+.card-front {
+  background: var(--bg-card);
+  border: 1.5px solid var(--accent);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 8px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.card-front.reversed {
+  transform: rotateY(180deg) rotate(180deg);
+}
+
+.card-numeral {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+.card-symbol {
+  font-size: 2rem;
+  margin: 6px 0;
+  filter: grayscale(1);
+  opacity: 0.8;
+}
+
+.card-name {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.card-name-cn {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-top: 2px;
+}
+
+.card-keywords {
+  margin-top: auto;
+  font-size: 0.52rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.card-reversed-label {
+  font-size: 0.55rem;
+  color: var(--red);
+  margin-top: 2px;
+}
+
+/* --- Spread Slots --- */
+.spread-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.spread-slot {
+  position: absolute;
+  width: var(--card-width);
+  height: var(--card-height);
+  border: 1.5px dashed var(--border);
+  border-radius: 8px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.spread-slot.highlight {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.04);
+}
+
+.spread-slot.filled {
+  border-color: transparent;
+}
+
+.spread-slot.crossed {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.slot-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-align: center;
+  position: absolute;
+  bottom: -20px;
+  white-space: nowrap;
+}
+
+.spread-slot.crossed .slot-label {
+  transform: rotate(-90deg);
+  bottom: auto;
+  right: -50px;
+}
+
+.spread-slot .card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+
+/* --- Floating Card --- */
+.floating-card {
+  position: fixed;
+  z-index: 80;
+  pointer-events: none;
+  transition: none;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+}
+
+.floating-card.animating {
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              top 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Reading Overlay & Popup --- */
+.reading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.reading-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.reading-popup {
+  background: var(--bg-elevated);
+  width: 96%;
+  max-width: 880px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  padding: 28px 28px 24px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+  transform: translateY(30px) scale(0.96);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reading-overlay.visible .reading-popup {
+  transform: translateY(0) scale(1);
+}
+
+.reading-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.reading-title {
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+
+.btn-close-reading {
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+  line-height: 1;
+}
+
+.btn-close-reading:hover {
+  background: var(--border-light);
+  color: var(--text);
+}
+
+.reading-cards {
+  display: grid;
+  gap: 14px;
+  justify-content: center;
+}
+
+.reading-cards[data-count="1"] {
+  grid-template-columns: 1fr;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.reading-cards[data-count="3"] {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.reading-cards[data-count="10"] {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.reading-card-item {
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.reading-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.reading-card-position {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.reading-card-name {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.reading-card-orientation {
+  font-size: 0.65rem;
+  color: var(--red);
+  margin-left: auto;
+}
+
+.reading-card-meaning {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.reading-card-keywords {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.reading-keyword {
+  font-size: 0.68rem;
+  background: var(--bg);
+  color: var(--text-secondary);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border-light);
+}
+
+/* --- Ad Slot --- */
+.reading-ad-slot {
+  margin-top: 20px;
+  padding: 18px;
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.ad-placeholder {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* --- Reading Footer --- */
+.reading-footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.btn-restart {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.btn-restart:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* --- Fallback Notice --- */
+.fallback-notice {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  z-index: 90;
+  display: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.fallback-notice.visible { display: block; }
+
+/* --- Utility --- */
+.hidden:not(.screen) { display: none !important; }
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  :root {
+    --card-width: 85px;
+    --card-height: 132px;
+  }
+  .menu-title { font-size: 2rem; }
+  .spread-options { gap: 12px; }
+  .spread-card { width: 155px; padding: 20px 16px; }
+  .reading-popup { padding: 20px 18px; }
+  .reading-cards[data-count="10"] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --card-width: 68px;
+    --card-height: 106px;
+  }
+  .menu-title { font-size: 1.6rem; }
+  .spread-card { width: 135px; }
+  .instruction-banner { padding: 10px 18px; }
+  .instruction-text { font-size: 0.88rem; }
+  .reading-cards[data-count="3"],
+  .reading-cards[data-count="10"] {
+    grid-template-columns: 1fr;
+  }
+}

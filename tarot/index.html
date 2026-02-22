@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minglion — 互動式塔羅占卜</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- MENU Screen -->
+    <div class="screen" id="menu-screen">
+      <h1 class="menu-title">Minglion</h1>
+      <p class="menu-subtitle">透過手勢與塔羅牌對話</p>
+      <div class="spread-options">
+        <div class="spread-card" data-spread="single">
+          <div class="spread-card-icon">I</div>
+          <div class="spread-card-name">單牌占卜</div>
+          <div class="spread-card-desc">抽取一張牌，獲得直接的指引</div>
+          <div class="spread-card-count">1 張牌</div>
+        </div>
+        <div class="spread-card" data-spread="threeCard">
+          <div class="spread-card-icon">III</div>
+          <div class="spread-card-name">時間之流</div>
+          <div class="spread-card-desc">過去、現在、未來的時間線占卜</div>
+          <div class="spread-card-count">3 張牌</div>
+        </div>
+        <div class="spread-card" data-spread="celticCross">
+          <div class="spread-card-icon">X</div>
+          <div class="spread-card-name">凱爾特十字</div>
+          <div class="spread-card-desc">十張牌的深度解讀，全方位分析</div>
+          <div class="spread-card-count">10 張牌</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOADING Screen -->
+    <div class="screen hidden" id="loading-screen">
+      <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">正在初始化...</p>
+      </div>
+    </div>
+
+    <!-- TABLE Screen -->
+    <div class="screen hidden table-screen" id="table-screen">
+      <div class="shuffle-area" id="shuffle-area"></div>
+      <div class="deck-area" id="deck-area"></div>
+      <div class="spread-area" id="spread-area"></div>
+    </div>
+
+    <!-- Instruction Banner -->
+    <div class="instruction-banner hidden" id="instruction-banner">
+      <div class="instruction-text"></div>
+      <div class="instruction-sub"></div>
+    </div>
+
+    <!-- Shuffle Meditation Overlay -->
+    <div class="meditation-overlay hidden" id="meditation-overlay">
+      <div class="meditation-text" id="meditation-text"></div>
+      <div class="meditation-hint" id="meditation-hint"></div>
+    </div>
+
+    <!-- Reading Popup Overlay -->
+    <div class="reading-overlay" id="reading-panel">
+      <div class="reading-popup">
+        <div class="reading-header">
+          <h2 class="reading-title" id="reading-title">解讀</h2>
+          <button class="btn-close-reading" id="btn-close-reading">&times;</button>
+        </div>
+        <div class="reading-cards" id="reading-cards"></div>
+        <!-- 廣告預留區 -->
+        <div class="reading-ad-slot" id="reading-ad-slot"></div>
+        <div class="reading-footer">
+          <button class="btn-restart" id="btn-restart">重新占卜</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gesture Cursor -->
+    <div class="gesture-cursor" id="gesture-cursor">
+      <div class="gesture-cursor-ring"></div>
+    </div>
+
+    <!-- Video Feed (hidden, used for gesture detection) -->
+    <video id="webcam" playsinline autoplay muted style="display:none;"></video>
+
+    <!-- Mouse Fallback Notice -->
+    <div class="fallback-notice" id="fallback-notice">
+      滑鼠模式 — 無法使用鏡頭，已切換為滑鼠/觸控操作
+    </div>
+
+  </div>
+
+  <script src="js/deck.js"></script>
+  <script src="js/spreads.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/gesture.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

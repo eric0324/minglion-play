@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minglion — 線上擲筊</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- MENU Screen -->
+    <div class="screen" id="menu-screen">
+      <h1 class="menu-title">Minglion</h1>
+      <p class="menu-subtitle">虔誠擲筊，聆聽神意</p>
+      <div class="mode-options">
+        <div class="mode-card" data-mode="single">
+          <div class="mode-card-icon">☽</div>
+          <div class="mode-card-name">單擲問卜</div>
+          <div class="mode-card-desc">擲一次筊，快速得到神明的指示</div>
+          <div class="mode-card-count">1 次</div>
+        </div>
+        <div class="mode-card" data-mode="triple">
+          <div class="mode-card-icon">☽☽☽</div>
+          <div class="mode-card-name">三擲定論</div>
+          <div class="mode-card-desc">連擲三次，以多數結果定論</div>
+          <div class="mode-card-count">3 次</div>
+        </div>
+        <div class="mode-card" data-mode="consecutive">
+          <div class="mode-card-icon">☽∞</div>
+          <div class="mode-card-name">連續聖筊</div>
+          <div class="mode-card-desc">須連續擲出三次聖筊方為允准</div>
+          <div class="mode-card-count">至少 3 次</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOADING Screen -->
+    <div class="screen hidden" id="loading-screen">
+      <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">正在初始化...</p>
+      </div>
+    </div>
+
+    <!-- PRAYER Screen -->
+    <div class="screen hidden" id="prayer-screen">
+      <div class="prayer-container">
+        <div class="prayer-icon">🙏</div>
+        <h2 class="prayer-title">在心中默想你的問題</h2>
+        <p class="prayer-hint">向神明稟告姓名、住址及所求之事</p>
+        <button class="btn-throw" id="btn-start-throw">擲筊</button>
+      </div>
+    </div>
+
+    <!-- THROW Screen -->
+    <div class="screen hidden" id="throw-screen">
+      <div class="throw-container" id="throw-container">
+        <div class="throw-round-info" id="throw-round-info"></div>
+
+        <div class="gesture-status" id="gesture-status">
+          <div class="gesture-hands">
+            <div class="gesture-hand" id="gesture-hand-left">✋</div>
+            <div class="gesture-hand" id="gesture-hand-right">✋</div>
+          </div>
+          <div class="gesture-label" id="gesture-label">偵測手勢中...</div>
+        </div>
+
+        <div class="jiaobei-stage" id="jiaobei-stage">
+          <div class="jiaobei-block" id="block-left">
+            <div class="block-inner">
+              <div class="block-face block-flat">
+                </div>
+              <div class="block-face block-round">
+                <div class="block-round-surface"></div>
+              </div>
+            </div>
+          </div>
+          <div class="jiaobei-block" id="block-right">
+            <div class="block-inner">
+              <div class="block-face block-flat">
+                </div>
+              <div class="block-face block-round">
+                <div class="block-round-surface"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="throw-prompt" id="throw-prompt">雙手握拳，張開即擲</div>
+      </div>
+    </div>
+
+    <!-- RESULT Screen -->
+    <div class="screen hidden" id="result-screen">
+      <div class="result-container">
+        <div class="result-icon" id="result-icon"></div>
+        <h2 class="result-title" id="result-title"></h2>
+        <p class="result-meaning" id="result-meaning"></p>
+        <div class="result-history" id="result-history"></div>
+        <div class="result-detail" id="result-detail"></div>
+        <div class="result-actions">
+          <button class="btn-again" id="btn-again">再擲一次</button>
+          <button class="btn-home" id="btn-home">回首頁</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meditation Overlay -->
+    <div class="meditation-overlay hidden" id="meditation-overlay">
+      <div class="meditation-text" id="meditation-text"></div>
+    </div>
+
+    <!-- Video Feed (hidden, for gesture detection) -->
+    <video id="webcam" playsinline autoplay muted style="display:none;"></video>
+
+    <!-- Mouse Fallback Notice -->
+    <div class="fallback-notice" id="fallback-notice">
+      滑鼠模式 — 無法使用鏡頭，已切換為點擊操作
+    </div>
+
+  </div>
+
+  <script src="js/jiaobei.js"></script>
+  <script src="js/gesture.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,612 @@
+/* ============================================
+   Jiaobei — Minimal White Theme
+   (Consistent with Tarot app design language)
+   ============================================ */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #fafafa;
+  --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --border: #e0e0e0;
+  --border-light: #eeeeee;
+  --text: #1a1a1a;
+  --text-secondary: #888888;
+  --text-muted: #b0b0b0;
+  --accent: #1a1a1a;
+  --accent-light: #555555;
+  --highlight: #000000;
+  --red: #c0392b;
+  --gold: #b8860b;
+  --green: #2d8a4e;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#app {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Screen --- */
+.screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.4s ease;
+}
+
+.screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- Menu --- */
+.menu-title {
+  font-size: 2.8rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.2em;
+  letter-spacing: 0.15em;
+}
+
+.menu-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 3em;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+}
+
+.mode-options {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.mode-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 22px;
+  width: 190px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+
+.mode-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+}
+
+.mode-card-icon {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+  opacity: 0.7;
+  letter-spacing: -0.15em;
+}
+
+.mode-card-name {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.mode-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.mode-card-count {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* --- Prayer Screen --- */
+.prayer-container {
+  text-align: center;
+  max-width: 420px;
+  padding: 0 24px;
+}
+
+.prayer-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.prayer-title {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.prayer-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.btn-throw {
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  padding: 12px 48px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.1em;
+}
+
+.btn-throw:hover {
+  background: var(--accent-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+/* --- Loading --- */
+.loading-container {
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin: 0 auto 18px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* --- Throw Screen --- */
+.throw-container {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 40px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.throw-container.fallback {
+  cursor: pointer;
+}
+
+.throw-round-info {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+  min-height: 1.2em;
+  z-index: 60;
+}
+
+/* --- Gesture Status --- */
+.gesture-status {
+  margin-bottom: 16px;
+  transition: opacity 0.3s;
+}
+
+.gesture-status.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gesture-hands {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.gesture-hand {
+  font-size: 2.2rem;
+  transition: transform 0.3s, opacity 0.3s;
+  opacity: 0.3;
+}
+
+.gesture-hand.detected {
+  opacity: 0.7;
+}
+
+.gesture-hand.grab {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.gesture-hand.grab::after {
+  content: '';
+}
+
+.gesture-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  min-height: 1.2em;
+}
+
+/* --- Fallback Notice --- */
+.fallback-notice {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  z-index: 90;
+  display: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.fallback-notice.visible { display: block; }
+
+/* --- Jiaobei Stage --- */
+.jiaobei-stage {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.jiaobei-block {
+  width: 60px;
+  height: 120px;
+  perspective: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -60px;
+  margin-left: -30px;
+  opacity: 0;
+}
+
+/* Left block ◖, right block ◗ */
+#block-left  { transform: scaleX(-1); }
+#block-right { transform: scaleX(1); }
+
+/* Visible after throw */
+.jiaobei-block.visible {
+  opacity: 1;
+}
+
+.block-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Half-circle crescent shape */
+.block-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 0 120px 120px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Flat side (陰面 - flat surface, darker red) */
+.block-flat {
+  background: linear-gradient(160deg, #c0392b, #a93226);
+  border: 1.5px solid rgba(120, 20, 15, 0.3);
+  border-left: none;
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,0.12),
+    0 2px 8px rgba(0,0,0,0.1);
+}
+
+.block-flat-surface {}
+
+/* Round side (陽面 - convex dome, brighter red) */
+.block-round {
+  background: linear-gradient(160deg, #e74c3c, #c0392b);
+  border: 1.5px solid rgba(120, 20, 15, 0.25);
+  border-left: none;
+  transform: rotateX(180deg);
+  box-shadow:
+    inset 0 -6px 16px rgba(0,0,0,0.1),
+    inset 0 4px 8px rgba(255,255,255,0.08),
+    0 2px 8px rgba(0,0,0,0.1);
+}
+
+.block-round-surface {
+  width: 70%;
+  height: 55%;
+  border-radius: 0 50% 50% 0;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(255,255,255,0.22) 0%,
+    rgba(255,255,255,0.06) 50%,
+    transparent 75%
+  );
+}
+
+/* Throw animation is driven by JS with Web Animations API */
+
+/* Landing — final transform set by JS inline style */
+
+/* Stage shake on land */
+.jiaobei-stage.landing {
+  animation: stageLand 0.4s ease-out;
+}
+
+@keyframes stageLand {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(4px); }
+  50% { transform: translateY(-2px); }
+  75% { transform: translateY(1px); }
+  100% { transform: translateY(0); }
+}
+
+/* Throw prompt */
+.throw-prompt {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  transition: opacity 0.3s;
+  z-index: 60;
+}
+
+.throw-prompt.hidden {
+  opacity: 0;
+}
+
+.throw-prompt.pulse {
+  animation: promptPulse 2s ease-in-out infinite;
+}
+
+@keyframes promptPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* --- Result Screen --- */
+.result-container {
+  text-align: center;
+  max-width: 420px;
+  padding: 0 28px;
+}
+
+.result-icon {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+  animation: resultFadeUp 0.5s ease both;
+}
+
+@keyframes resultFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-title {
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: 0.12em;
+  animation: resultFadeUp 0.5s ease 0.08s both;
+}
+
+.result-title.holy { color: var(--red); }
+.result-title.laugh { color: var(--text-muted); }
+.result-title.negative { color: var(--accent-light); }
+
+.result-meaning {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 28px;
+  animation: resultFadeUp 0.5s ease 0.16s both;
+}
+
+.result-history {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+  min-height: 0;
+}
+
+.result-history:empty {
+  display: none;
+}
+
+.history-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--bg);
+  animation: resultFadeUp 0.4s ease both;
+}
+
+.history-round {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.history-icon {
+  font-size: 1.1rem;
+}
+
+.history-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.result-detail {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 32px;
+  text-align: left;
+  animation: resultFadeUp 0.5s ease 0.24s both;
+}
+
+.result-detail:empty {
+  display: none;
+  margin-bottom: 0;
+}
+
+.result-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  animation: resultFadeUp 0.5s ease 0.32s both;
+}
+
+.btn-again,
+.btn-home {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.btn-again:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.btn-home:hover {
+  border-color: var(--accent);
+}
+
+/* --- Meditation Overlay --- */
+.meditation-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.meditation-overlay.hidden {
+  opacity: 0;
+}
+
+.meditation-text {
+  font-size: 1.4rem;
+  color: var(--text);
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: 0 24px;
+  transition: opacity 0.5s ease;
+}
+
+.meditation-text.fading {
+  opacity: 0;
+}
+
+/* --- Incense smoke effect --- */
+.smoke-container {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+}
+
+/* --- Utility --- */
+.hidden:not(.screen) { display: none !important; }
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .menu-title { font-size: 2rem; }
+  .mode-options { gap: 12px; }
+  .mode-card { width: 155px; padding: 20px 16px; }
+  .jiaobei-stage { width: 220px; height: 170px; gap: 30px; }
+  .jiaobei-block { width: 50px; height: 100px; }
+  .result-container { padding: 0 20px; }
+}
+
+@media (max-width: 480px) {
+  .menu-title { font-size: 1.6rem; }
+  .mode-card { width: 135px; }
+  .jiaobei-stage { width: 180px; height: 140px; gap: 20px; }
+  .jiaobei-block { width: 42px; height: 84px; }
+  .prayer-container { padding: 0 16px; }
+  .result-title { font-size: 1.6rem; }
+  .result-actions { flex-direction: column; }
+}
