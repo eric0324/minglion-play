@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minglion — 線上擲筊</title>
-  <link rel="stylesheet" href="css/style.css?v=2">
+  <title>Minglion — 觀音靈籤</title>
+  <meta name="description" content="線上觀音靈籤，誠心祈禱、擲筊求允、搖籤筒抽籤，體驗完整的傳統求籤流程。">
+  <link rel="stylesheet" href="css/style.css?v=1">
 </head>
 <body>
 
@@ -13,27 +14,8 @@
     <!-- MENU Screen -->
     <div class="screen" id="menu-screen">
       <h1 class="menu-title">Minglion</h1>
-      <p class="menu-subtitle">虔誠擲筊，聆聽神意</p>
-      <div class="mode-options">
-        <div class="mode-card" data-mode="single">
-          <div class="mode-card-icon">☽</div>
-          <div class="mode-card-name">單擲問卜</div>
-          <div class="mode-card-desc">擲一次筊，快速得到神明的指示</div>
-          <div class="mode-card-count">1 次</div>
-        </div>
-        <div class="mode-card" data-mode="triple">
-          <div class="mode-card-icon">☽☽☽</div>
-          <div class="mode-card-name">三擲定論</div>
-          <div class="mode-card-desc">連擲三次，以多數結果定論</div>
-          <div class="mode-card-count">3 次</div>
-        </div>
-        <div class="mode-card" data-mode="consecutive">
-          <div class="mode-card-icon">☽∞</div>
-          <div class="mode-card-name">連續聖筊</div>
-          <div class="mode-card-desc">須連續擲出三次聖筊方為允准</div>
-          <div class="mode-card-count">至少 3 次</div>
-        </div>
-      </div>
+      <p class="menu-subtitle">觀音靈籤 · 誠心求問</p>
+      <button class="menu-start-btn" id="btn-start">開始求籤</button>
     </div>
 
     <!-- LOADING Screen -->
@@ -49,15 +31,21 @@
       <div class="prayer-container">
         <div class="prayer-icon">🙏</div>
         <h2 class="prayer-title">在心中默想你的問題</h2>
-        <p class="prayer-hint">向神明稟告姓名、住址及所求之事</p>
-        <button class="btn-throw" id="btn-start-throw">擲筊</button>
+        <p class="prayer-hint">向觀音菩薩稟告姓名、住址及所求之事，誠心祈禱後擲筊求允</p>
+        <button class="btn-throw" id="btn-start-throw">擲筊求允</button>
       </div>
     </div>
 
-    <!-- THROW Screen -->
+    <!-- THROW Screen (first throw + confirm throws) -->
     <div class="screen hidden" id="throw-screen">
       <div class="throw-container" id="throw-container">
         <div class="throw-round-info" id="throw-round-info"></div>
+
+        <div class="confirm-progress hidden" id="confirm-progress">
+          <div class="confirm-dot" id="dot-1"></div>
+          <div class="confirm-dot" id="dot-2"></div>
+          <div class="confirm-dot" id="dot-3"></div>
+        </div>
 
         <div class="gesture-status" id="gesture-status">
           <div class="gesture-hands">
@@ -70,8 +58,7 @@
         <div class="jiaobei-stage" id="jiaobei-stage">
           <div class="jiaobei-block" id="block-left">
             <div class="block-inner">
-              <div class="block-face block-flat">
-                </div>
+              <div class="block-face block-flat"></div>
               <div class="block-face block-round">
                 <div class="block-round-surface"></div>
               </div>
@@ -79,8 +66,7 @@
           </div>
           <div class="jiaobei-block" id="block-right">
             <div class="block-inner">
-              <div class="block-face block-flat">
-                </div>
+              <div class="block-face block-flat"></div>
               <div class="block-face block-round">
                 <div class="block-round-surface"></div>
               </div>
@@ -92,16 +78,62 @@
       </div>
     </div>
 
+    <!-- DRAW Screen (籤筒) -->
+    <div class="screen hidden" id="draw-screen">
+      <div class="draw-container">
+        <p class="draw-instruction">菩薩允准，請搖籤筒抽籤</p>
+        <div class="stick-container" id="stick-container">
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+          <div class="stick"></div>
+        </div>
+        <p class="draw-hint" id="draw-hint">握拳搖動籤筒，張開手掌抽籤</p>
+        <div class="gesture-status" id="draw-gesture-status">
+          <div class="gesture-hand">✋</div>
+          <div class="gesture-label">將手伸到鏡頭前</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STICK Screen (show drawn stick) -->
+    <div class="screen hidden" id="stick-screen">
+      <div class="stick-screen-container">
+        <div class="stick-number-large" id="stick-number"></div>
+        <p class="stick-question">是否是這支籤？</p>
+        <div class="stick-actions">
+          <button class="btn-confirm" id="btn-stick-yes">是，擲筊確認</button>
+          <button class="btn-redraw" id="btn-stick-no">不是，重新抽籤</button>
+        </div>
+      </div>
+    </div>
+
     <!-- RESULT Screen -->
     <div class="screen hidden" id="result-screen">
       <div class="result-container">
-        <div class="result-icon" id="result-icon"></div>
+        <div class="result-lot-number" id="result-lot-number"></div>
+        <div class="result-fortune-badge" id="result-fortune-badge"></div>
         <h2 class="result-title" id="result-title"></h2>
-        <p class="result-meaning" id="result-meaning"></p>
-        <div class="result-history" id="result-history"></div>
-        <div class="result-detail" id="result-detail"></div>
+
+        <div class="poem-container" id="poem-container"></div>
+
+        <div class="interpretation-section">
+          <div class="interpretation-label">【解曰】</div>
+          <div class="interpretation-text" id="result-interpretation"></div>
+        </div>
+
+        <div class="advice-grid" id="advice-grid"></div>
+
         <div class="result-actions">
-          <button class="btn-again" id="btn-again">再擲一次</button>
+          <button class="btn-again" id="btn-again">再求一籤</button>
           <button class="btn-home" id="btn-home">回首頁</button>
         </div>
       </div>
@@ -126,13 +158,14 @@
     <nav class="site-footer-nav">
       <a class="site-footer-link" href="/tarot">塔羅牌</a>
       <span class="site-footer-sep">|</span>
-      <span class="site-footer-link active">線上擲筊</span>
+      <a class="site-footer-link" href="/jiaobei">線上擲筊</a>
       <span class="site-footer-sep">|</span>
-      <a class="site-footer-link" href="/guanyin">觀音靈籤</a>
+      <span class="site-footer-link active">觀音靈籤</span>
     </nav>
     <div class="site-footer-copy">&copy; 2026 Minglion</div>
   </footer>
 
+  <script src="js/lots.js"></script>
   <script src="js/jiaobei.js"></script>
   <script src="js/gesture.js"></script>
   <script src="js/animations.js"></script>
